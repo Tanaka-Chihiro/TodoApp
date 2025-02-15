@@ -1,0 +1,123 @@
+.body {
+  margin: 50px 0;
+  text-align: center;
+}
+/* タイトル */
+.title {
+  margin: 0;
+  font-size: 36px;
+  padding: 10px 0px 10px 0;
+  color: #27c0cb;
+}
+/* Todoリスト表示エリア */
+.todo_area {
+  width: 600px;
+  margin: 0 auto;
+  padding: 30px;
+  background-color: #f9f9f9;
+  border: solid 1px #113739;
+  border-radius: 10px;
+}
+/* 入力部分 */
+.form {
+  width: 500px;
+  display: flex;
+  justify-content: space-between;
+  margin: 0 auto;
+  padding-bottom: 20px;
+  border-bottom: dotted 3px #27c0cb;
+}
+.todo_form {
+  width: 420px;
+  height: 24px;
+  border: solid 1px #113739;
+  border-radius: 5px;
+}
+.add {
+  width: 45px;
+  text-align: center;
+  height: 28px;
+  color: #ffffff;
+  background-color: #27c0cb;
+  border: solid 1px #113739;
+  border-radius: 5px;
+}
+/* リスト表示部分 */
+.todo_list {
+  width: 500px;
+  margin: 0 auto;
+  padding: 20px 0 0 0;
+}
+.todo_contents {
+  display: flex;
+  justify-content: space-between;
+  padding: 5px;
+  background-color: #ffffff;
+  border: solid 1px #113739;
+  border-radius: 5px;
+}
+.todo_title {
+  width: 400px;
+  height: 24px;
+  border: solid 1px #113739;
+  border-radius: 5px;
+}
+.edit {
+  border: none;
+  background: none;
+  color: #52b0b6;
+}
+.done {
+  border: none;
+  background: none;
+  color: #0d757c;
+}
+
+@media (max-width: 767px) {
+  /* Todoリスト表示エリア */
+  .todo_area {
+    width: 400px;
+    padding: 20px;
+  }
+  /* タイトル */
+  .title {
+    margin: 0;
+    font-size: 24px;
+  }
+  /* 入力部分 */
+  .form {
+    width: 350px;
+    display: flex;
+    padding-bottom: 10px;
+  }
+  .todo_form {
+    width: 300px;
+    height: 18px;
+  }
+  .add {
+    width: 36px;
+    height: 22px;
+    font-size: 12px;
+    padding: 3px;
+  }
+  /* リスト表示部分 */
+  .todo_list {
+    width: 350px;
+    padding: 10px 0 0 0;
+  }
+  .todo_contents {
+    display: flex;
+    justify-content: space-around;
+    padding: 5px;
+  }
+  .todo_title {
+    width: 300px;
+    height: 18px;
+  }
+  .edit {
+    font-size: 12px;
+  }
+  .done {
+    font-size: 12px;
+  }
+}
