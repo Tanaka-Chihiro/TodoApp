@@ -1,7 +1,6 @@
 type TodoContets = {
-  id: number;
-  todo: string;
-  isDone: boolean;
+  id: string;
+  title: string;
 };
 
 export type { TodoContets };
