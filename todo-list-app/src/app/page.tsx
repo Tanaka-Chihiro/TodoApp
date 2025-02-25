@@ -1,25 +1,32 @@
 "use client";
 import { SetStateAction, useState } from "react";
 import { TodoContets } from "./lib/Type";
+import { v4 as uuidv4 } from "uuid";
 
 import style from "./page.module.css";
 
 export default function Todo() {
-  let maxID = 0;
   const [title, setTitle] = useState<string>("");
   const [todos, setTodo] = useState<TodoContets[]>([]);
-  const [isDisabled, setisDisabled] = useState(false);
+  const [isEditing, setisEditing] = useState(false);
 
+  //Todoの入力
+  const handleSetTitle = (e: { target: { value: SetStateAction<string> } }) => {
+    setTitle(e.target.value);
+  };
+
+  //Todoの編集
   const handleTitleChange = (e: {
     target: { value: SetStateAction<string> };
   }) => {
     setTitle(e.target.value);
   };
 
+  //Todoの追加
   const handleAddTodo = () => {
-    const addNewTodo = todos.slice();
+    const addNewTodo = [...todos];
     addNewTodo.push({
-      id: String(++maxID),
+      id: uuidv4(),
       title,
     });
     console.log(addNewTodo);
@@ -27,14 +34,20 @@ export default function Todo() {
     setTitle("");
   };
 
-  const handleEditTodo = () => {};
-
-  const handleSubmitTodo = () => {
-    setisDisabled(false);
+  //Todoの編集ボタン
+  const handleEditTodo = () => {
+    setisEditing(true);
   };
 
-  const handleDoneTodo = () => {
-    // const doneTodo = todos.findIndex((value) => value.id === id);
+  //Todoの再投稿ボタン
+  const handleSubmitTodo = () => {
+    setisEditing(false);
+  };
+
+  //Todoの完了ボタン
+  const handleDoneTodo = (id: string) => {
+    const doneTodo = todos.filter((todo) => todo.id !== id);
+    setTodo(doneTodo);
   };
 
   return (
@@ -47,7 +60,7 @@ export default function Todo() {
             type="text"
             id="title"
             value={title}
-            onChange={handleTitleChange}
+            onChange={handleSetTitle}
             className={style.todo_form}
           />
           <button className={style.add} onClick={handleAddTodo}>
@@ -55,22 +68,23 @@ export default function Todo() {
           </button>
         </div>
         {/* リスト */}
-        <ul className={style.todo_list}>
+        <ul key="todoContents" className={style.todo_list}>
           {todos.map((todo) => (
             <li className={style.todo_contents}>
-              {isDisabled ? (
+              {isEditing ? (
                 <input
                   type="text"
-                  key={"TODO" + todo.id}
+                  key="todoContents"
                   id={todo.id}
                   value={todo.title}
                   name={todo.title}
                   className={style.todo_title}
+                  onChange={handleTitleChange}
                 />
               ) : (
                 <p className={style.todo_title}>{todo.title}</p>
               )}
-              {isDisabled ? (
+              {isEditing ? (
                 <button
                   onClick={handleSubmitTodo}
                   id={todo.id}
@@ -88,7 +102,7 @@ export default function Todo() {
                 </button>
               )}
               <button
-                onClick={handleDoneTodo}
+                onClick={() => handleDoneTodo(todo.id)}
                 id={todo.id}
                 className={style.done}
               >
