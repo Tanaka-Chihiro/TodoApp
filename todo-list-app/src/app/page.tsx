@@ -7,19 +7,24 @@ import style from "./page.module.css";
 
 export default function Todo() {
   const [title, setTitle] = useState<string>("");
-  const [todos, setTodo] = useState<TodoContets[]>([]);
-  const [isEditing, setisEditing] = useState(false);
+  const [todos, setTodo] = useState<TodoContets[]>([
+    { id: "1", title: "こめ" },
+    { id: "2", title: "テスト" },
+    { id: "3", title: "項目" },
+  ]);
+  const [isEditingID, setisEditingID] = useState<string | null>(null);
+  const [editedTitle, setEditedTitle] = useState("");
 
-  //Todoの入力
+  // Todoの入力
   const handleSetTitle = (e: { target: { value: SetStateAction<string> } }) => {
     setTitle(e.target.value);
   };
 
-  //Todoの編集
+  //編集後のTodo
   const handleTitleChange = (e: {
     target: { value: SetStateAction<string> };
   }) => {
-    setTitle(e.target.value);
+    setEditedTitle(e.target.value);
   };
 
   //Todoの追加
@@ -35,13 +40,20 @@ export default function Todo() {
   };
 
   //Todoの編集ボタン
-  const handleEditTodo = () => {
-    setisEditing(true);
+  const handleEditTodo = (id: string, title: string) => {
+    setisEditingID(id);
+    setEditedTitle(title);
   };
 
   //Todoの再投稿ボタン
-  const handleSubmitTodo = () => {
-    setisEditing(false);
+  const handleSubmitTodo = (id: string) => {
+    setTodo(
+      todos.map((todo) =>
+        todo.id === id ? { ...todo, title: editedTitle } : todo
+      )
+    );
+    setisEditingID(null);
+    setEditedTitle("");
   };
 
   //Todoの完了ボタン
@@ -68,15 +80,15 @@ export default function Todo() {
           </button>
         </div>
         {/* リスト */}
-        <ul key="todoContents" className={style.todo_list}>
-          {todos.map((todo) => (
+        {todos.map((todo) => (
+          <ul key={todo.id} className={style.todo_list}>
             <li className={style.todo_contents}>
-              {isEditing ? (
+              {isEditingID === todo.id ? (
                 <input
                   type="text"
                   key="todoContents"
                   id={todo.id}
-                  value={todo.title}
+                  value={editedTitle}
                   name={todo.title}
                   className={style.todo_title}
                   onChange={handleTitleChange}
@@ -84,9 +96,9 @@ export default function Todo() {
               ) : (
                 <p className={style.todo_title}>{todo.title}</p>
               )}
-              {isEditing ? (
+              {isEditingID === todo.id ? (
                 <button
-                  onClick={handleSubmitTodo}
+                  onClick={() => handleSubmitTodo(todo.id)}
                   id={todo.id}
                   className={style.edit}
                 >
@@ -94,7 +106,7 @@ export default function Todo() {
                 </button>
               ) : (
                 <button
-                  onClick={handleEditTodo}
+                  onClick={() => handleEditTodo(todo.id, todo.title)}
                   id={todo.id}
                   className={style.edit}
                 >
@@ -109,8 +121,8 @@ export default function Todo() {
                 Done
               </button>
             </li>
-          ))}
-        </ul>
+          </ul>
+        ))}
       </div>
     </div>
   );
