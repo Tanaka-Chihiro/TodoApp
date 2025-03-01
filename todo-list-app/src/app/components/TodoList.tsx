@@ -28,7 +28,6 @@ export default function TodoList({
           {editingID === todo.id ? (
             <input
               type="text"
-              key="todoContents"
               id={todo.id}
               value={editedTitle}
               name={todo.title}

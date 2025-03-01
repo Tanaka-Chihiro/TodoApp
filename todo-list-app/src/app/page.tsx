@@ -5,7 +5,6 @@ import { v4 as uuidv4 } from "uuid";
 import style from "./components/page.module.css";
 import AddTodo from "./components/AddTodo";
 import TodoList from "./components/TodoList";
-import { todo } from "node:test";
 
 export default function Todo() {
   //State
