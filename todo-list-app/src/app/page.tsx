@@ -5,6 +5,7 @@ import { v4 as uuidv4 } from "uuid";
 import style from "./components/page.module.css";
 import AddTodo from "./components/AddTodo";
 import TodoList from "./components/TodoList";
+import { todo } from "node:test";
 
 export default function Todo() {
   //State
@@ -24,15 +25,20 @@ export default function Todo() {
   };
   //Todoの追加
   const handleAddTodo = () => {
-    const addNewTodo = [...todos];
-    addNewTodo.push({
-      id: uuidv4(),
-      title,
-    });
-    //確認用
-    console.log(addNewTodo);
-    setTodo(addNewTodo);
-    setTitle("");
+    if (title === "") {
+      alert("Todoを入力してください");
+      return;
+    } else {
+      const addNewTodo = [...todos];
+      addNewTodo.push({
+        id: uuidv4(),
+        title,
+      });
+      //確認用
+      console.log(addNewTodo);
+      setTodo(addNewTodo);
+      setTitle("");
+    }
   };
 
   //編集中のTodoの入力
@@ -69,6 +75,7 @@ export default function Todo() {
       <div className={style.todo_area}>
         {/* 入力フォーム */}
         <AddTodo
+          todos={todos}
           todoTitle={title}
           setTitle={handleSetTitle}
           addTodo={handleAddTodo}

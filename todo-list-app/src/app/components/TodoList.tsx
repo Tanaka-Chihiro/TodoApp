@@ -22,50 +22,48 @@ export default function TodoList({
   doneTodo,
 }: TodoListProps) {
   return (
-    <>
+    <ul className={style.todo_list}>
       {todos.map((todo) => (
-        <ul key={todo.id} className={style.todo_list}>
-          <li className={style.todo_contents}>
-            {editingID === todo.id ? (
-              <input
-                type="text"
-                key="todoContents"
-                id={todo.id}
-                value={editedTitle}
-                name={todo.title}
-                className={style.todo_title}
-                onChange={titleChange}
-              />
-            ) : (
-              <p className={style.todo_title}>{todo.title}</p>
-            )}
-            {editingID === todo.id ? (
-              <button
-                onClick={() => submitTodo(todo.id)}
-                id={todo.id}
-                className={style.edit}
-              >
-                Submit
-              </button>
-            ) : (
-              <button
-                onClick={() => editTodo(todo.id, todo.title)}
-                id={todo.id}
-                className={style.edit}
-              >
-                Edit
-              </button>
-            )}
-            <button
-              onClick={() => doneTodo(todo.id)}
+        <li key={todo.id} className={style.todo_contents}>
+          {editingID === todo.id ? (
+            <input
+              type="text"
+              key="todoContents"
               id={todo.id}
-              className={style.done}
+              value={editedTitle}
+              name={todo.title}
+              className={style.todo_title_editing}
+              onChange={titleChange}
+            />
+          ) : (
+            <div className={style.todo_title}>{todo.title}</div>
+          )}
+          {editingID === todo.id ? (
+            <button
+              onClick={() => submitTodo(todo.id)}
+              id={todo.id}
+              className={style.edit}
             >
-              Done
+              Submit
             </button>
-          </li>
-        </ul>
+          ) : (
+            <button
+              onClick={() => editTodo(todo.id, todo.title)}
+              id={todo.id}
+              className={style.edit}
+            >
+              Edit
+            </button>
+          )}
+          <button
+            onClick={() => doneTodo(todo.id)}
+            id={todo.id}
+            className={style.done}
+          >
+            Done
+          </button>
+        </li>
       ))}
-    </>
+    </ul>
   );
 }
