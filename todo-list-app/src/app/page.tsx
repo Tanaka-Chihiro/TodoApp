@@ -1,32 +1,27 @@
 "use client";
 import { SetStateAction, useState } from "react";
-import { TodoContets } from "./lib/Type";
+import { TodoContets } from "./components/Type";
 import { v4 as uuidv4 } from "uuid";
-
-import style from "./page.module.css";
+import style from "./components/page.module.css";
+import AddTodo from "./components/AddTodo";
+import TodoList from "./components/TodoList";
 
 export default function Todo() {
+  //State
+  //Todoを格納する配列
+  const [todos, setTodo] = useState<TodoContets[]>([]);
+  //Todoのタイトル
   const [title, setTitle] = useState<string>("");
-  const [todos, setTodo] = useState<TodoContets[]>([
-    { id: "1", title: "こめ" },
-    { id: "2", title: "テスト" },
-    { id: "3", title: "項目" },
-  ]);
+  //編集中のTodoのID
   const [isEditingID, setisEditingID] = useState<string | null>(null);
+  //編集後のTodo
   const [editedTitle, setEditedTitle] = useState("");
 
+  //操作
   // Todoの入力
   const handleSetTitle = (e: { target: { value: SetStateAction<string> } }) => {
     setTitle(e.target.value);
   };
-
-  //編集後のTodo
-  const handleTitleChange = (e: {
-    target: { value: SetStateAction<string> };
-  }) => {
-    setEditedTitle(e.target.value);
-  };
-
   //Todoの追加
   const handleAddTodo = () => {
     const addNewTodo = [...todos];
@@ -34,17 +29,23 @@ export default function Todo() {
       id: uuidv4(),
       title,
     });
+    //確認用
     console.log(addNewTodo);
     setTodo(addNewTodo);
     setTitle("");
   };
 
+  //編集中のTodoの入力
+  const handleTitleChange = (e: {
+    target: { value: SetStateAction<string> };
+  }) => {
+    setEditedTitle(e.target.value);
+  };
   //Todoの編集ボタン
   const handleEditTodo = (id: string, title: string) => {
     setisEditingID(id);
     setEditedTitle(title);
   };
-
   //Todoの再投稿ボタン
   const handleSubmitTodo = (id: string) => {
     setTodo(
@@ -67,62 +68,21 @@ export default function Todo() {
       <h1 className={style.title}>My Todo List</h1>
       <div className={style.todo_area}>
         {/* 入力フォーム */}
-        <div className={style.form}>
-          <input
-            type="text"
-            id="title"
-            value={title}
-            onChange={handleSetTitle}
-            className={style.todo_form}
-          />
-          <button className={style.add} onClick={handleAddTodo}>
-            Add
-          </button>
-        </div>
+        <AddTodo
+          todoTitle={title}
+          setTitle={handleSetTitle}
+          addTodo={handleAddTodo}
+        />
         {/* リスト */}
-        {todos.map((todo) => (
-          <ul key={todo.id} className={style.todo_list}>
-            <li className={style.todo_contents}>
-              {isEditingID === todo.id ? (
-                <input
-                  type="text"
-                  key="todoContents"
-                  id={todo.id}
-                  value={editedTitle}
-                  name={todo.title}
-                  className={style.todo_title}
-                  onChange={handleTitleChange}
-                />
-              ) : (
-                <p className={style.todo_title}>{todo.title}</p>
-              )}
-              {isEditingID === todo.id ? (
-                <button
-                  onClick={() => handleSubmitTodo(todo.id)}
-                  id={todo.id}
-                  className={style.edit}
-                >
-                  Submit
-                </button>
-              ) : (
-                <button
-                  onClick={() => handleEditTodo(todo.id, todo.title)}
-                  id={todo.id}
-                  className={style.edit}
-                >
-                  Edit
-                </button>
-              )}
-              <button
-                onClick={() => handleDoneTodo(todo.id)}
-                id={todo.id}
-                className={style.done}
-              >
-                Done
-              </button>
-            </li>
-          </ul>
-        ))}
+        <TodoList
+          todos={todos}
+          editingID={isEditingID}
+          editedTitle={editedTitle}
+          titleChange={handleTitleChange}
+          submitTodo={handleSubmitTodo}
+          editTodo={handleEditTodo}
+          doneTodo={handleDoneTodo}
+        />
       </div>
     </div>
   );
