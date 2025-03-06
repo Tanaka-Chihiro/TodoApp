@@ -12,31 +12,38 @@ export default function Todo() {
   const [todos, setTodo] = useState<TodoContets[]>([]);
   //Todoのタイトル
   const [title, setTitle] = useState<string>("");
+  //期日
+  const [date, setDate] = useState("");
   //編集中のTodoのID
   const [isEditingID, setisEditingID] = useState<string | null>(null);
   //編集後のTodo
   const [editedTitle, setEditedTitle] = useState("");
+  //編集後の日付
+  const [editedDate, setEditedDate] = useState("");
 
   //操作
   // Todoの入力
   const handleSetTitle = (e: { target: { value: SetStateAction<string> } }) => {
     setTitle(e.target.value);
   };
+  const handleSetDate = (e: { target: { value: SetStateAction<string> } }) => {
+    setDate(e.target.value);
+  };
   //Todoの追加
   const handleAddTodo = () => {
-    if (title === "") {
-      alert("Todoを入力してください");
+    if (title === "" || date === "") {
+      alert("タイトルと日付の入力は必須です");
       return;
     } else {
       const addNewTodo = [...todos];
       addNewTodo.push({
         id: uuidv4(),
         title,
+        date,
       });
-      //確認用
-      console.log(addNewTodo);
       setTodo(addNewTodo);
       setTitle("");
+      setDate("");
     }
   };
 
@@ -46,20 +53,27 @@ export default function Todo() {
   }) => {
     setEditedTitle(e.target.value);
   };
+  //編集中の期限の入力
+  const handleDateChange = (e: {
+    target: { value: SetStateAction<string> };
+  }) => {
+    setEditedDate(e.target.value);
+  };
   //Todoの編集ボタン
-  const handleEditTodo = (id: string, title: string) => {
+  const handleEditTodo = (id: string, title: string, date: string) => {
     setisEditingID(id);
     setEditedTitle(title);
+    setEditedDate(date);
   };
   //Todoの再投稿ボタン
   const handleSubmitTodo = (id: string) => {
-    setTodo(
-      todos.map((todo) =>
-        todo.id === id ? { ...todo, title: editedTitle } : todo
-      )
+    const editedTodos = todos.map((todo) =>
+      todo.id === id ? { ...todo, title: editedTitle, date: editedDate } : todo
     );
+    setTodo(editedTodos);
     setisEditingID(null);
     setEditedTitle("");
+    setEditedDate("");
   };
 
   //Todoの完了ボタン
@@ -76,7 +90,9 @@ export default function Todo() {
         <AddTodo
           todos={todos}
           todoTitle={title}
+          date={date}
           setTitle={handleSetTitle}
+          setDate={handleSetDate}
           addTodo={handleAddTodo}
         />
         {/* リスト */}
@@ -84,7 +100,9 @@ export default function Todo() {
           todos={todos}
           editingID={isEditingID}
           editedTitle={editedTitle}
+          editedDate={editedDate}
           titleChange={handleTitleChange}
+          dateChange={handleDateChange}
           submitTodo={handleSubmitTodo}
           editTodo={handleEditTodo}
           doneTodo={handleDoneTodo}
